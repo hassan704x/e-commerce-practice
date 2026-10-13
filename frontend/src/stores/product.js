@@ -57,7 +57,7 @@ export const useProductStore = create((set) => ({
     return { success: true, message: data.message };
   },
 
-  // 👉 NEW FUNCTION (remove without API call)
+ 
   removeProductFromState: (pid) =>
     set((state) => ({
       products: state.products.filter((p) => p._id !== pid),

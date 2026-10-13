@@ -10,7 +10,7 @@ const CreatePage = () => {
   const handleAddProduct = async () => {
     const { success, message } = await createProduct(newProduct);
 
-    // 🔹 Unified toast for success & error
+    
     toast({
       title: success ? "Success" : "Error",
       description: message,
@@ -18,7 +18,6 @@ const CreatePage = () => {
       isClosable: true,
     });
 
-    // 🔹 Reset form only on success
     if (success) setNewProduct({ name: "", price: "", image: "" });
   };
 

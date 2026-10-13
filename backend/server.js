@@ -1,37 +1,35 @@
-import express from "express";
-import dotenv from "dotenv";
-import path from "path";
-import { fileURLToPath } from "url";
-import { connectDB } from "./config/db.js";
-import productRoutes from "./routes/product.routes.js";
+import express from 'express';
+import dotenv from 'dotenv';
+import { connectDB } from './config/db.js';
+import productRoutes from './routes/product.routes.js';
+import path from 'path'; // Fixed the incomplete import
+import { fileURLToPath } from 'url'; // Need this for ES modules
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// __dirname setup for ES Modules
+// Fix for ES modules to get __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware
-app.use(express.json());
+app.use(express.json()); // Middleware to parse JSON bodies
 
-// API Routes
-app.use("/api/products", productRoutes);
+// Use the product routes
+app.use('/api/products', productRoutes);
 
-// Production Frontend Serve
-if (process.env.NODE_ENV === "production") {
-  // Yeh change kiya
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  app.get("/*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../frontend/dist", "index.html"));
-  });
+// Serve static files in production
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '/frontend/dist')));
+    
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'));
+    });
 }
 
-// Start Server
-app.listen(PORT, async () => {
-  await connectDB();
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+// Connect to DB and start server
+app.listen(PORT, () => {
+    connectDB();
+    console.log('Server is running at http://localhost:' + PORT);
 });
